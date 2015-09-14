@@ -1,8 +1,13 @@
 /*	Virtual fan switch with on/off, low, med, high buttons. Switch take the strings off, low, med, high and makes them
 	into setlevels as 0=off, 30=low, 60=med, 100=high. levels are used by smartapp that controls arduino fan relay. 
-*/    
+*/  
+preferences {
+	input("deviceId", "text", titel: "Device ID")
+    input("toekn", "text", titel: "Access Token")
+    input("fannumber","text", titel: "Fan Number 1-4") 
+    }
 metadata {
-	definition (name: "Virt Fan Control Switch", namespace: "Fan Control", author: "Tom Forti") {
+	definition (name: "Spark Fan Control", namespace: "Fan Control", author: "Tom Forti") {
 		capability "Switch"
 		capability "Switch Level"
         capability "Refresh"
@@ -18,8 +23,8 @@ metadata {
 
 	tiles {
         standardTile("switch", "device.switch", width: 2, height: 2, canChangeIcon: true) {
-			state "off", label: '${name}', action: "switch.on", icon:"st.Lighting.light24", backgroundColor: "#ffffff", nextState: "on"
-			state "on", label: '${name}', action: "switch.off", icon:"st.Lighting.light24", backgroundColor: "#79b821"    
+			state "off", label: 'OFF', action: "switch.on", icon:"st.Lighting.light24", backgroundColor: "#ffffff", nextState: "on"
+			state "on", label: 'OFF', action: "switch.off", icon:"st.Lighting.light24", backgroundColor: "#79b821"    
 
 		}
         //Slider not show in display but kept in for trouble shooting / testing, if needed. 
@@ -51,15 +56,17 @@ metadata {
 }
 
 def parse(String description) {
+	log.error "This device does not support incoming events"
+    return null
 }
 
 def on() {
-	setLevel(60)//fan set to med
+off()
 }
 
 def off() {
-	setLevel(0)//fan tunred off
-	log.info "Fan Off"
+//turn fan off
+log.info "Fan Off"
 }
 
 //take value and turns it into string string value (off, low, med, high)
@@ -70,17 +77,17 @@ def setLevel(val){
     	sendEvent(name:"switch.setLevel",value:val) // had to add this to work if apps subscribed to
         											// setLevel event. "Dim With Me" was one.
         if (val == "0"){ 
-       		sendEvent(name: "currentSpeed", value: "OFF" as String)
-   		}
+ 			off()   		
+            }
         if (val == "30") {
-        	sendEvent(name: "currentSpeed", value: "LOW" as String)
-        }
+        	lowSpeed()
+        	}
         if (val == "60") {
-        	sendEvent(name: "currentSpeed", value: "MED" as String)
-        }
+        	medSpeed()
+        	}
         if (val == "100") {
-        	sendEvent(name: "currentSpeed", value: "HIGH" as String)
-        }                                                  
+        	highSpeed()
+        	}                                                  
     
 }
 
@@ -92,22 +99,16 @@ def setLevel(val, dur){ //used for hue emulator
 
 //allows the buttons to set the level of the fan
 def lowSpeed() {
-	setLevel(30)
 	log.info "Fan low"
     sendEvent(name: "currentSpeed", value: "LOW" as String)
-	sendEvent(name: "switch", value: "on", isStateChange: true, display: false)     
 }
 
 def medSpeed() {
-	setLevel(60)
 	log.info "Fan Med"
     sendEvent(name: "currentSpeed", value: "MED" as String)
-    sendEvent(name: "switch", value: "on", isStateChange: true, display: false)
 }
 
 def highSpeed() {
-	setLevel(100)
 	log.info "Fan High"
     sendEvent(name: "currentSpeed", value: "HIGH" as String)
-    sendEvent(name: "switch", value: "on", isStateChange: true, display: false)
 }

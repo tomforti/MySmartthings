@@ -1,8 +1,11 @@
+/*Device type for use by arduino shield, goes along with smartapp and virtual device
+*/
 metadata {
 
 	definition (name: "Arduino Fans", namespace: "Fan Control", author: "tomforti@gmail.com") {
         capability "Switch"
         capability "Momentary"
+       
                 
 		command "fan1off"
         command "fan1low"
@@ -23,6 +26,7 @@ metadata {
        	
 	}
     
+    ////switchs are push style switches because arduino isn't able to tell if the fans are on or not. 
     tiles {
    		standardTile("fan1off", "device.fan1off", width: 1, height: 1, canChangeIcon: true) {
 			state "off", label: 'fan1off', action: "fan1off", icon:"st.Lighting.light24", backgroundColor: "#ffffff", nextState: "on"
@@ -91,122 +95,94 @@ metadata {
    
    
 		main "fan1off"
-		details (["fan1off", "fan1low", "fan1med", "fan1hi", "fan2off", "fan2low", "fan2med", "fan2hi", "fan3off", "fan3low", "fan3med", "fan3hi", "fan4off", "fan4low", "fan4med", "fan4hi"])
+		details(["fan1off", "fan1low", "fan1med", "fan1hi", "fan2off", "fan2low", "fan2med", "fan2hi", "fan3off", "fan3low", "fan3med", "fan3hi", "fan4off", "fan4low", "fan4med", "fan4hi"])
 	}
+      
 }
 
+
+
+//Command is simply received and sent over to the arduino shield, relay command are done within the arduino
 def fan1off() {
+    sendEvent(name: "fan1off", value: "off", isStateChange: true, display: false)//turns the switch back off
 	log.debug "Turning Fan 1 Off"
-    zigbee.smartShield(text: "fanoff:1").format()
-    sendEvent(name: "fan1off", value: "on", isStateChange: true, display: false)
-	sendEvent(name: "fan1off", value: "off", isStateChange: true, display: false)
-	sendEvent(name: "momentary", value: "pushed", isStateChange: true)  
+    zigbee.smartShield(text: "fanoff:1").format()//send command over to arduino
 } 
 def fan1low() {
+    sendEvent(name: "fan1low", value: "off", isStateChange: true, display: false)
 	log.debug "Turning Fan 1 to Low"
     zigbee.smartShield(text: "fanlow:1").format()
-    sendEvent(name: "fan1low", value: "on", isStateChange: true, display: false)
-	sendEvent(name: "fan1low", value: "off", isStateChange: true, display: false)
-	sendEvent(name: "momentary", value: "pushed", isStateChange: true)
 }
 def fan1med() {
+	sendEvent(name: "fan1med", value: "off", isStateChange: true, display: false)
 	log.debug "Turning Fan 1 to Med"
     zigbee.smartShield(text: "fanmed:1").format()
-    sendEvent(name: "fan1med", value: "on", isStateChange: true, display: false)
-	sendEvent(name: "fan1med", value: "off", isStateChange: true, display: false)
-	sendEvent(name: "momentary", value: "pushed", isStateChange: true)
 }
 def fan1hi() {
+	sendEvent(name: "fan1hi", value: "off", isStateChange: true, display: false)
 	log.debug "Turning Fan 1 to High"
     zigbee.smartShield(text: "fanhi:1").format()
-    sendEvent(name: "fan1hi", value: "on", isStateChange: true, display: false)
-	sendEvent(name: "fan1hi", value: "off", isStateChange: true, display: false)
-	sendEvent(name: "momentary", value: "pushed", isStateChange: true)
 }
 
 def fan2off() {
+	sendEvent(name: "fan2off", value: "off", isStateChange: true, display: false)
 	log.debug "Turning Fan 2 Off"
     zigbee.smartShield(text: "fanoff:2").format()
-    sendEvent(name: "fan2off", value: "on", isStateChange: true, display: false)
-	sendEvent(name: "fan2off", value: "off", isStateChange: true, display: false)
-	sendEvent(name: "momentary", value: "pushed", isStateChange: true)
 } 
 def fan2low() {
+	sendEvent(name: "fan2low", value: "off", isStateChange: true, display: false)
 	log.debug "Turning Fan 2 to Low"
     zigbee.smartShield(text: "fanlow:2").format()
-    sendEvent(name: "fan2low", value: "on", isStateChange: true, display: false)
-	sendEvent(name: "fan2low", value: "off", isStateChange: true, display: false)
-	sendEvent(name: "momentary", value: "pushed", isStateChange: true)
 }
 def fan2med() {
+	sendEvent(name: "fan2med", value: "off", isStateChange: true, display: false)
 	log.debug "Turning Fan 2 to Med"
     zigbee.smartShield(text: "fanmed:2").format()
-    sendEvent(name: "fan2med", value: "on", isStateChange: true, display: false)
-	sendEvent(name: "fan2med", value: "off", isStateChange: true, display: false)
-	sendEvent(name: "momentary", value: "pushed", isStateChange: true)
 }
 def fan2hi() {
+	sendEvent(name: "fan2hi", value: "off", isStateChange: true, display: false)
 	log.debug "Turning Fan 2 to High"
     zigbee.smartShield(text: "fanhi:2").format()
-    sendEvent(name: "fan2hi", value: "on", isStateChange: true, display: false)
-	sendEvent(name: "fan2hi", value: "off", isStateChange: true, display: false)
-	sendEvent(name: "momentary", value: "pushed", isStateChange: true)
 }
 
 def fan3off() {
+	sendEvent(name: "fan3off", value: "off", isStateChange: true, display: false)
 	log.debug "Turning Fan 3 Off"
     zigbee.smartShield(text: "fanoff:3").format()
-    sendEvent(name: "fan3off", value: "on", isStateChange: true, display: false)
-	sendEvent(name: "fan3off", value: "off", isStateChange: true, display: false)
-	sendEvent(name: "momentary", value: "pushed", isStateChange: true)
 } 
 def fan3low() {
+	sendEvent(name: "fan3low", value: "off", isStateChange: true, display: false)
 	log.debug "Turning Fan 3 to Low"
     zigbee.smartShield(text: "fanlow:3").format()
-    sendEvent(name: "fan3low", value: "on", isStateChange: true, display: false)
-	sendEvent(name: "fan3low", value: "off", isStateChange: true, display: false)
-	sendEvent(name: "momentary", value: "pushed", isStateChange: true)
 }
 def fan3med() {
+	sendEvent(name: "fan3med", value: "off", isStateChange: true, display: false)
 	log.debug "Turning Fan 3 to Med"
     zigbee.smartShield(text: "fanmed:3").format()
-    sendEvent(name: "fan3med", value: "on", isStateChange: true, display: false)
-	sendEvent(name: "fan3med", value: "off", isStateChange: true, display: false)
-	sendEvent(name: "momentary", value: "pushed", isStateChange: true)
 }
 def fan3hi() {
+	sendEvent(name: "fan3hi", value: "off", isStateChange: true, display: false)
 	log.debug "Turning Fan 3 to High"
     zigbee.smartShield(text: "fanhi:3").format()
-    sendEvent(name: "fan3hi", value: "on", isStateChange: true, display: false)
-	sendEvent(name: "fan3hi", value: "off", isStateChange: true, display: false)
-	sendEvent(name: "momentary", value: "pushed", isStateChange: true)
 }
 
 def fan4off() {
+	sendEvent(name: "fan4off", value: "off", isStateChange: true, display: false)
 	log.debug "Turning Fan 4 Off"
     zigbee.smartShield(text: "fanoff:4").format()
-    sendEvent(name: "fan4off", value: "on", isStateChange: true, display: false)
-	sendEvent(name: "fan4off", value: "off", isStateChange: true, display: false)
-	sendEvent(name: "momentary", value: "pushed", isStateChange: true)
 } 
 def fan4low() {
+	sendEvent(name: "fan4low", value: "off", isStateChange: true, display: false)
 	log.debug "Turning Fan 4 to Low"
     zigbee.smartShield(text: "fanlow:4").format()
-    sendEvent(name: "fan4low", value: "on", isStateChange: true, display: false)
-	sendEvent(name: "fan4low", value: "off", isStateChange: true, display: false)
-	sendEvent(name: "momentary", value: "pushed", isStateChange: true)
 }
 def fan4med() {
+	sendEvent(name: "fan4med", value: "off", isStateChange: true, display: false)
 	log.debug "Turning Fan 4 to Med"
     zigbee.smartShield(text: "fanmed:4").format()
-    sendEvent(name: "fan4med", value: "on", isStateChange: true, display: false)
-	sendEvent(name: "fan4med", value: "off", isStateChange: true, display: false)
-	sendEvent(name: "momentary", value: "pushed", isStateChange: true)
 }
 def fan4hi() {
+	sendEvent(name: "fan4hi", value: "off", isStateChange: true, display: false)
 	log.debug "Turning Fan 4 to High"
     zigbee.smartShield(text: "fanhi:4").format()
-    sendEvent(name: "fan4hi", value: "on", isStateChange: true, display: false)
-	sendEvent(name: "fan4hi", value: "off", isStateChange: true, display: false)
-	sendEvent(name: "momentary", value: "pushed", isStateChange: true)
 }
