@@ -1,18 +1,14 @@
-/**
- *  8 way Relay
- *
- *  Copyright 2015 Tom Forti
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- *  in compliance with the License. You may obtain a copy of the License at:
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
- *  for the specific language governing permissions and limitations under the License.
- *
- */
+/*
+App is middle man to be used by the vitural fan switch and the arduino fan relay. It takes the setleves from the vitural
+switch and based on the level triggers the arduino fans on or off.
+To set up you will need to go into preferences and set the vitural fans to the app as well as the arduino shield.
+Look at the arduino code to match the fans to the correct pin config.
+If all code is kept the same
+fan1 has all pins off
+fan2 has pin 1 on
+fan3 has pin 2 on
+fan4 has pin 3 on
+*/
 definition(
     name: "Fan Relay App",
     namespace: "Fan Control",
@@ -23,7 +19,7 @@ definition(
     iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
     iconX3Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png")
 
-
+//set the fans and arduino to the app
 preferences {
 	section("Connect these virtual Fans to the Arduino") {
 		input "fan1", title: "Fan 1 for arduino", "capability.switchLevel"
@@ -47,6 +43,7 @@ def installed() {
     subscribe(fan4, "switch", fan4val)
 }
 
+//checks for changes from the vitural fan switch
 def updated() {
 	unsubscribe()
 	subscribe(fan1, "switch.setLevel", fan1val)
@@ -60,17 +57,17 @@ def updated() {
     log.info "subscribed to all of Fan events"
 }
 
-
+//takes value from vitrual device and uses it to trigger fan
 def fan1val(evt)
 {
 	if ((evt.value == "on") || (evt.value == "off" ))
-		return
+		return //if value is on or off than it stops
 	log.debug "UpdateLevel: $evt"
 	int level = fan1.currentValue("level")
 	log.debug "level: $level"	
     
     if (level == 0) {
-    	arduino.fan1off()
+    	arduino.fan1off() //tell the arduino to turn trigger this arduino switch
     	
     }
      if (level == 30) {
